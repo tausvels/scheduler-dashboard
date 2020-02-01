@@ -54,6 +54,7 @@ class Dashboard extends Component {
     const getDaysUrl = `https://scheduleinterview.herokuapp.com/api/days`;
     const getInterviewersUrl = `https://scheduleinterview.herokuapp.com/api/interviewers`;
     const getAppointmentsUrl = `https://scheduleinterview.herokuapp.com/api/appointments`;
+    
 
     const getDays = axios.get(getDaysUrl), getInterviewers = axios.get(getInterviewersUrl), getAppointments = axios.get(getAppointmentsUrl);
     Promise.all([
@@ -64,7 +65,7 @@ class Dashboard extends Component {
         loading: false, days: days.data, interviewers: interviewers.data, appointments: appointments.data
       });
     });
-
+    // ------------------ WEB SOCKET SECTION ------------------------------------------- //
     this.socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
     this.socket.onmessage = event => {
       const data = JSON.parse(event.data);
@@ -76,7 +77,7 @@ class Dashboard extends Component {
       }
     };
   }
-
+  // ----------------------------------------------------------------------------------- //
   componentDidUpdate(prevProps, prevState) {
     if (prevState.focused !== this.state.focused) {
       localStorage.setItem("focused", JSON.stringify(this.state.focused));
@@ -93,7 +94,7 @@ class Dashboard extends Component {
     this.socket.close();
   }
 
-  render() {
+  render() {console.log(process.env.REACT_APP_WEBSOCKET_URL)
     const panelComponent = data
     .filter(panel => this.state.focused === null || this.state.focused === panel.id)
     .map(({id, label, getValue}) => {
@@ -114,4 +115,3 @@ class Dashboard extends Component {
 }
 
 export default Dashboard;
-
